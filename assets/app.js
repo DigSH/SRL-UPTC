@@ -1244,7 +1244,7 @@
     const dataCoords = vectors.map((v, i) => pt(i, v.score).map((n) => n.toFixed(1)).join(',')).join(' ');
     const dots = vectors.map((v, i) => {
       const [x, y] = pt(i, v.score);
-      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="var(--accent)" stroke="var(--surface)" stroke-width="1.5"/>`;
+      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="#1d1d1b" stroke="#FFCC20" stroke-width="2"/>`;
     }).join('');
 
     const labels = vectors.map((v, i) => {
@@ -1253,16 +1253,23 @@
       return `
         <text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor}" font-size="11" font-weight="700" fill="var(--text)">
           <tspan x="${x.toFixed(1)}" dy="0">${escapeHtml(v.short)}</tspan>
-          <tspan x="${x.toFixed(1)}" dy="13" font-size="10" font-weight="600" fill="var(--accent)">${fmt1(v.score)} / 10</tspan>
+          <tspan x="${x.toFixed(1)}" dy="13" font-size="10" font-weight="700" fill="var(--gold-deep)">${fmt1(v.score)} / 10</tspan>
         </text>`;
     }).join('');
 
     return `
       <svg viewBox="0 0 ${size} ${size}" role="img" aria-label="Gráfico radial de los 5 vectores de innovación social HELIX">
+        <defs>
+          <radialGradient id="hxRadarGrad" cx="50%" cy="50%" r="55%">
+            <stop offset="0%" stop-color="#1d1d1b" stop-opacity="0.18"/>
+            <stop offset="65%" stop-color="#FFCC20" stop-opacity="0.34"/>
+            <stop offset="100%" stop-color="#FFCC20" stop-opacity="0.52"/>
+          </radialGradient>
+        </defs>
         ${gridPolys}
         ${axes}
         ${ringLabels}
-        <polygon points="${dataCoords}" fill="var(--accent)" fill-opacity="0.22" stroke="var(--accent)" stroke-width="2.5"/>
+        <polygon points="${dataCoords}" fill="url(#hxRadarGrad)" stroke="#d4a300" stroke-width="2.4"/>
         ${dots}
         ${labels}
       </svg>`;
@@ -1298,14 +1305,16 @@
       const first = group[0];
       const cx = xFor(first.score10).toFixed(1);
       const cy = yFor(first.importance10).toFixed(1);
-      const color = first.score10 >= 5 ? 'var(--ok)' : 'var(--danger)';
+      const isGood = first.score10 >= 5;
+      const fill = isGood ? '#1d1d1b' : 'var(--danger)';
+      const stroke = isGood ? '#FFCC20' : 'var(--surface)';
       const ids = group.map((g) => g.item.id).join(', ');
       const names = group.map((g) => `${g.item.id} (${g.item.label}): Valoración ${fmt1(g.score10)}/10 · Importancia ${fmt1(g.importance10)}/10`).join('\n');
       return `
         <g>
           <title>${escapeHtml(names)}</title>
-          <circle cx="${cx}" cy="${cy}" r="${group.length > 1 ? 6 : 4.5}" fill="${color}" stroke="var(--surface)" stroke-width="1.5"/>
-          <text x="${Number(cx) + 6}" y="${Number(cy) + 3}" font-size="9" font-weight="600" fill="var(--text)">${escapeHtml(ids)}</text>
+          <circle cx="${cx}" cy="${cy}" r="${group.length > 1 ? 6 : 4.8}" fill="${fill}" stroke="${stroke}" stroke-width="1.8"/>
+          <text x="${Number(cx) + 7}" y="${Number(cy) + 3}" font-size="9" font-weight="600" fill="var(--text)">${escapeHtml(ids)}</text>
         </g>`;
     }).join('');
 
@@ -1313,7 +1322,7 @@
       <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de atributos de innovación social en cuatro cuadrantes">
         <!-- Fondos de cuadrantes -->
         <rect x="${padL}" y="${padT}" width="${midX - padL}" height="${midY - padT}" fill="var(--warn-bg)" fill-opacity="0.45"/>
-        <rect x="${midX}" y="${padT}" width="${padL + plotW - midX}" height="${midY - padT}" fill="var(--accent-soft)" fill-opacity="0.55"/>
+        <rect x="${midX}" y="${padT}" width="${padL + plotW - midX}" height="${midY - padT}" fill="var(--accent-soft)" fill-opacity="0.65"/>
         <rect x="${padL}" y="${midY}" width="${midX - padL}" height="${padT + plotH - midY}" fill="var(--surface-2)" fill-opacity="0.35"/>
         <rect x="${midX}" y="${midY}" width="${padL + plotW - midX}" height="${padT + plotH - midY}" fill="var(--surface-2)" fill-opacity="0.2"/>
         <rect x="${padL}" y="${padT}" width="${plotW}" height="${plotH}" fill="none" stroke="var(--border)" stroke-width="1.5"/>
@@ -1322,7 +1331,7 @@
         <line x1="${padL}" y1="${midY}" x2="${padL + plotW}" y2="${midY}" stroke="var(--text-dim)" stroke-dasharray="4,4" stroke-width="1.2"/>
         <!-- Etiquetas de cuadrantes -->
         <text x="${padL + 10}" y="${padT + 18}" font-size="10.5" font-weight="700" fill="var(--danger)">ÁREAS DE MEJORA PRIORITARIAS (Alta imp. · Baja val.)</text>
-        <text x="${padL + plotW - 10}" y="${padT + 18}" text-anchor="end" font-size="10.5" font-weight="700" fill="var(--accent)">FORTALEZAS CLAVE (Alta imp. · Alta val.)</text>
+        <text x="${padL + plotW - 10}" y="${padT + 18}" text-anchor="end" font-size="10.5" font-weight="700" fill="var(--gold-deep)">FORTALEZAS CLAVE (Alta imp. · Alta val.)</text>
         <text x="${padL + 10}" y="${padT + plotH - 8}" font-size="10" font-weight="600" fill="var(--text-dim)">Debilidades secundarias (Menor imp. · Baja val.)</text>
         <text x="${padL + plotW - 10}" y="${padT + plotH - 8}" text-anchor="end" font-size="10" font-weight="600" fill="var(--text-dim)">Fortalezas secundarias (Menor imp. · Alta val.)</text>
         <!-- Ejes X e Y -->
