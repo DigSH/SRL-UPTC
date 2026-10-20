@@ -52,4 +52,14 @@ python tools/build_brand.py       # regenerate assets/img/uptc-vie-cabezote.png
    - `buildScatterInterpretationHtml` summarizes quadrant distribution (`P1R4`), ranks top 3 critical
      gaps in Quadrant 1 (*Áreas de mejora prioritarias*) with their next rubric target (`75%`/`100%`),
      and highlights the top 3 strategic strengths in Quadrant 2 (*Fortalezas clave*).
-5. **Generated data**: Never hand-edit `assets/data.js`; update `tools/build_data.py` and re-run.
+5. **Institutional UPTC Palette & Allusive Motifs (`assets/styles.css` & `assets/app.js`)**:
+   - Uses the official UPTC identity colours **`#1d1d1b`** (charcoal black) and **`#FFCC20`**
+     (institutional gold) combined with warm neutrals (`#f5f4f0`, `#eceae3`) and smooth gradients
+     (`--grad-brand`, `--grad-bar`, `--grad-gold-soft`) to keep `#FFCC20` balanced and WCAG AA/AAA
+     compliant in light, dark, and `@media print` modes.
+   - `.hero::after`, `.score-card`, and `.hx-interp-card` embed lightweight inline SVG watermarks
+     allusive to the dual tool: concentric pentagons and 5 nodes (HELIX vectors), a double-helix curve
+     connecting social nodes (HELIX), and a 9-step ascending staircase (SRL 1–9).
+   - `buildRadarSvg` fills the radar polygon with a radial gradient (`#hxRadarGrad`) from `#1d1d1b` at
+     the center to `#FFCC20` at the outer vertices.
+6. **Generated data**: Never hand-edit `assets/data.js`; update `tools/build_data.py` and re-run.
