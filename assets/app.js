@@ -1339,6 +1339,182 @@
       </svg>`;
   }
 
+  // ═══════════════════════ Interpretación automática de gráficas HELIX ═══════════════════════
+
+  function buildRadarInterpretationHtml(activeData, isComplete) {
+    const g = activeData.globalScore;
+    let tierLabel = 'Fase embrionaria (0,0–2,4)';
+    let tierTone = 'danger';
+    let tierDesc = 'El pentágono se concentra cerca del centro. El proyecto requiere estructurar sus bases metodológicas, participativas y de propuesta de valor antes de escalar.';
+    if (g >= 8.5) {
+      tierLabel = 'Referente de excelencia (8,5–10,0)';
+      tierTone = 'ok';
+      tierDesc = 'El pentágono se expande hacia el borde exterior en la mayoría de sus ejes, reflejando una innovación social altamente madura, consistente y con potencial de transformación sistémica.';
+    } else if (g >= 7.0) {
+      tierLabel = 'Innovación social consolidada (7,0–8,4)';
+      tierTone = 'ok';
+      tierDesc = 'El polígono radial cubre una superficie amplia por encima del umbral medio (5,0), evidenciando solidez técnica y capacidad probada de generación de valor social.';
+    } else if (g >= 5.0) {
+      tierLabel = 'Consolidación intermedia (5,0–6,9)';
+      tierTone = 'warn';
+      tierDesc = 'El proyecto supera el umbral de suficiencia (anillo 5,0), pero presenta márgenes claros de expansión hacia los anillos exteriores (8,0–10,0) en vectores específicos.';
+    } else if (g >= 2.5) {
+      tierLabel = 'Desarrollo inicial (2,5–4,9)';
+      tierTone = 'warn';
+      tierDesc = 'El polígono permanece por dentro del anillo intermedio (5,0). Existen avances parciales, pero aún predominan brechas que limitan el impacto y la sostenibilidad.';
+    }
+
+    const sortedByScore = activeData.vectors.slice().sort((a, b) => b.score - a.score);
+    const strongest = sortedByScore[0];
+    const secondStrongest = sortedByScore[1];
+    const weakest = sortedByScore[sortedByScore.length - 1];
+    const gap = strongest.score - weakest.score;
+    const above5 = activeData.vectors.filter((v) => v.score >= 5).length;
+
+    let shapeTitle = 'Pentágono equilibrado y simétrico';
+    let shapeDesc = `La brecha entre el vector más alto (<b>${escapeHtml(strongest.short)}: ${fmt1(strongest.score)}/10</b>) y el más bajo (<b>${escapeHtml(weakest.short)}: ${fmt1(weakest.score)}/10</b>) es reducida (<b>${fmt1(gap)} pts</b>), lo que indica un desarrollo armónico entre las cinco dimensiones.`;
+    if (gap >= 4.0) {
+      shapeTitle = 'Pentágono asimétrico o polarizado';
+      shapeDesc = `Existe una diferencia amplia de <b>${fmt1(gap)} puntos</b> entre el vértice más exterior (<b>${escapeHtml(strongest.short)}: ${fmt1(strongest.score)}/10</b>) y el más retraído hacia el centro (<b>${escapeHtml(weakest.short)}: ${fmt1(weakest.score)}/10</b>). El rezago en ${escapeHtml(weakest.short)} desbalancea el perfil integral de la iniciativa.`;
+    } else if (gap >= 2.0) {
+      shapeTitle = 'Pentágono con asimetría moderada';
+      shapeDesc = `El perfil está traccionado por <b>${escapeHtml(strongest.short)} (${fmt1(strongest.score)}/10)</b> y <b>${escapeHtml(secondStrongest.short)} (${fmt1(secondStrongest.score)}/10)</b>, con una diferencia de <b>${fmt1(gap)} puntos</b> frente a <b>${escapeHtml(weakest.short)} (${fmt1(weakest.score)}/10)</b>, que constituye el vértice más cercano al centro.`;
+    }
+
+    const sortedByWeight = activeData.vectors.slice().sort((a, b) => b.weight - a.weight);
+    const topWeightVec = sortedByWeight[0];
+    const byPotentialGain = activeData.vectors
+      .map((v) => ({ ...v, maxGain: v.weight * (10 - v.score), gainPlus2: v.weight * Math.min(2, 10 - v.score) }))
+      .sort((a, b) => b.maxGain - a.maxGain);
+    const bestLeverage = byPotentialGain[0];
+
+    let weightInteraction;
+    if (topWeightVec.score >= 7.0) {
+      weightInteraction = `El vector de mayor peso en la ponderación activa es <b>${escapeHtml(topWeightVec.short)} (${pct(topWeightVec.weight)} %)</b> y cuenta con una valoración alta (<b>${fmt1(topWeightVec.score)}/10</b>), actuando como principal motor de la nota global.`;
+    } else if (topWeightVec.score >= 5.0) {
+      weightInteraction = `El vector de mayor peso estratégico es <b>${escapeHtml(topWeightVec.short)} (${pct(topWeightVec.weight)} %)</b> con una nota intermedia de <b>${fmt1(topWeightVec.score)}/10</b>; fortalecerlo producirá un efecto directo significativo sobre el puntaje global.`;
+    } else {
+      weightInteraction = `Atención estratégica: el vector con mayor peso en la ponderación activa (<b>${escapeHtml(topWeightVec.short)}, ${pct(topWeightVec.weight)} %</b>) tiene una valoración baja (<b>${fmt1(topWeightVec.score)}/10</b>), lo que penaliza de forma importante la nota global.`;
+    }
+
+    return `
+      <div class="hx-interp-head">
+        <h3>Interpretación automática del perfil radial por vectores</h3>
+        <span class="hx-interp-badge" data-tone="${tierTone}">${escapeHtml(tierLabel)}</span>
+      </div>
+      <p class="hx-interp-lead">
+        Con una nota global de <b>${fmt2(g)} / 10</b> (${isComplete ? 'valoración completa por atributos' : 'valoración rápida por vectores'}),
+        el proyecto supera el umbral de suficiencia (≥ 5,0) en <b>${above5} de los 5 vectores</b>. ${tierDesc}
+      </p>
+      <div class="hx-interp-grid">
+        <div class="hx-interp-item">
+          <h4>1. Geometría del pentágono (${escapeHtml(shapeTitle)})</h4>
+          <p>${shapeDesc}</p>
+        </div>
+        <div class="hx-interp-item" data-tone="${topWeightVec.score < 5 ? 'warn' : 'ok'}">
+          <h4>2. Efecto de la ponderación activa</h4>
+          <p>${weightInteraction}</p>
+        </div>
+        <div class="hx-interp-item" data-tone="${bestLeverage.score < 5 ? 'danger' : 'warn'}">
+          <h4>3. Mayor palanca de mejora global</h4>
+          <p>El vector con mayor margen ponderado de crecimiento es <b>${escapeHtml(bestLeverage.short)}</b> (actual: <b>${fmt1(bestLeverage.score)}/10</b>, peso: <b>${pct(bestLeverage.weight)} %</b>). Incrementarlo en 2 puntos elevaría la nota global en <b>+${fmt2(bestLeverage.gainPlus2)} puntos</b> (potencial máximo: +${fmt2(bestLeverage.maxGain)} pts si llega a 10/10).</p>
+        </div>
+      </div>`;
+  }
+
+  function buildScatterInterpretationHtml(completeData) {
+    const evaluated = completeData.elements.filter((e) => e.isEvaluated);
+    if (!evaluated.length) {
+      return `
+        <div class="hx-interp-head">
+          <h3>Interpretación automática del mapa de atributos (4 cuadrantes)</h3>
+          <span class="hx-interp-badge" data-tone="warn">Sin atributos valorados</span>
+        </div>
+        <p class="hx-interp-lead" style="margin:0">
+          Aún no se han calificado atributos en las pestañas <b>HELIX V1 a V5</b>. Una vez valore los elementos de cada vector, aquí se generará automáticamente el diagnóstico espacial por cuadrantes, las brechas críticas y las metas de mejora según la rúbrica HELIX.
+        </p>`;
+    }
+
+    const qImprove = evaluated
+      .filter((e) => e.quadrant === 'improve')
+      .sort((a, b) => (b.importance10 * (10 - b.score10)) - (a.importance10 * (10 - a.score10)));
+    const qStrength = evaluated
+      .filter((e) => e.quadrant === 'strength')
+      .sort((a, b) => (b.importance10 * b.score10) - (a.importance10 * a.score10));
+    const qLowWeak = evaluated
+      .filter((e) => e.quadrant === 'low-weak')
+      .sort((a, b) => a.score10 - b.score10);
+    const qLowGood = evaluated
+      .filter((e) => e.quadrant === 'low-good')
+      .sort((a, b) => b.score10 - a.score10);
+
+    const highImpTotal = qImprove.length + qStrength.length;
+    const highImpSolvedRatio = highImpTotal > 0 ? qStrength.length / highImpTotal : 1;
+
+    let mapBadge = 'Mapa dominado por fortalezas clave';
+    let mapTone = 'ok';
+    if (qImprove.length > qStrength.length && qImprove.length > 0) {
+      mapBadge = 'Alerta en atributos de alta importancia';
+      mapTone = 'danger';
+    } else if (qImprove.length > 0) {
+      mapBadge = `${qImprove.length} ${qImprove.length === 1 ? 'brecha prioritaria identificada' : 'brechas prioritarias identificadas'}`;
+      mapTone = 'warn';
+    } else if (highImpTotal === 0 && qLowWeak.length > qLowGood.length) {
+      mapBadge = 'Predominio de debilidades operativas';
+      mapTone = 'warn';
+    }
+
+    const prioritySource = qImprove.length > 0
+      ? qImprove.slice(0, 3)
+      : evaluated.slice().sort((a, b) => a.score10 - b.score10).filter((e) => e.score10 < 10).slice(0, 3);
+
+    const priorityListHtml = prioritySource.length
+      ? `<ul class="hx-interp-list">${prioritySource.map((e) => {
+          const targetOpt = e.score10 < 5 ? e.item.options[1] : e.item.options[0];
+          const targetPct = targetOpt ? Math.round(targetOpt.score * 100) : 100;
+          return `<li><b>${escapeHtml(e.item.id)} · ${escapeHtml(e.item.label)}</b> (val.: <b>${fmt1(e.score10)}/10</b> · imp.: <b>${fmt1(e.importance10)}/10</b>): para desplazarlo hacia la derecha (${targetPct} %), se requiere lograr que <em>«${escapeHtml(targetOpt ? targetOpt.text : '')}»</em>.</li>`;
+        }).join('')}</ul>`
+      : '<p>Todos los atributos evaluados se encuentran en el nivel máximo (10/10).</p>';
+
+    const strengthSource = qStrength.length > 0
+      ? qStrength.slice(0, 3)
+      : qLowGood.slice(0, 3);
+
+    const strengthListHtml = strengthSource.length
+      ? `<ul class="hx-interp-list">${strengthSource.map((e) =>
+          `<li><b>${escapeHtml(e.item.id)} · ${escapeHtml(e.item.label)}</b> (val.: <b>${fmt1(e.score10)}/10</b> · imp.: <b>${fmt1(e.importance10)}/10</b>): soporte diferencial en el vector de ${escapeHtml(DATA.helix.vectors[e.item.vectorIndex].short)}.</li>`
+        ).join('')}</ul>`
+      : '<p>Ningún atributo evaluado supera aún el umbral de 5,0/10 en el eje horizontal.</p>';
+
+    return `
+      <div class="hx-interp-head">
+        <h3>Interpretación automática del mapa de atributos (4 cuadrantes)</h3>
+        <span class="hx-interp-badge" data-tone="${mapTone}">${escapeHtml(mapBadge)}</span>
+      </div>
+      <p class="hx-interp-lead">
+        Sobre <b>${evaluated.length} atributos evaluados</b> (${completeData.naCount} marcados como «No aplica»),
+        <b>${highImpTotal} atributos</b> tienen importancia relativa alta (≥ 5,0 en el eje vertical).
+        De esos atributos críticos para el proyecto, el <b>${pct(highImpSolvedRatio)} % (${qStrength.length} de ${highImpTotal})</b> se ubica en el cuadrante de <b>Fortalezas clave</b> (derecha) y <b>${qImprove.length}</b> en <b>Áreas de mejora prioritarias</b> (izquierda).
+        En la franja inferior (importancia &lt; 5,0) se registran <b>${qLowGood.length} fortalezas secundarias</b> y <b>${qLowWeak.length} debilidades secundarias</b>.
+      </p>
+      <div class="hx-interp-grid">
+        <div class="hx-interp-item" data-tone="${qImprove.length ? 'danger' : 'warn'}">
+          <h4>${qImprove.length ? 'Ruta de acción: cuadrante superior izquierdo (Prioridad 1)' : 'Atributos con mayor margen de mejora'}</h4>
+          <p>${qImprove.length
+            ? 'Estos atributos combinan alta importancia estratégica (≥ 5,0) con baja valoración (< 5,0); intervenirlos desplaza los puntos hacia el cuadrante superior derecho:'
+            : 'No existen brechas críticas de alta importancia (< 5,0); para seguir perfeccionando el proyecto se sugiere atender:'}</p>
+          ${priorityListHtml}
+        </div>
+        <div class="hx-interp-item">
+          <h4>Activos diferenciales: cuadrante superior derecho</h4>
+          <p>${qStrength.length
+            ? 'Atributos de alta importancia y alto desempeño que sostienen la propuesta de valor social y conviene documentar y transferir:'
+            : 'Atributos mejor valorados actualmente en el proyecto:'}</p>
+          ${strengthListHtml}
+        </div>
+      </div>`;
+  }
+
   // ═══════════════════════ Renderizado de Resultados HELIX ═══════════════════════
 
   function renderHelixResults() {
@@ -1399,12 +1575,15 @@
       )
     ).join('');
 
+    $('#hx-radar-interp').innerHTML = buildRadarInterpretationHtml(activeData, isComplete);
+
     const completeBox = $('#hx-complete-only');
     if (!isComplete) {
       completeBox.hidden = true;
     } else {
       completeBox.hidden = false;
       $('#hx-scatter-svg').innerHTML = buildScatterSvg(hxRes.complete.elements);
+      $('#hx-scatter-interp').innerHTML = buildScatterInterpretationHtml(hxRes.complete);
 
       const quadDefs = [
         {

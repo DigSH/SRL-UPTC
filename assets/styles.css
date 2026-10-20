@@ -649,6 +649,54 @@ abbr.term {
 .level .lvl-stage { font-size: .74rem; text-transform: uppercase; letter-spacing: .07em; color: var(--text-dim); font-weight: 700; width: 100%; }
 .level p { margin: .7rem 0 0; font-size: .9rem; color: var(--text-dim); }
 
+/* ───────────── Interpretación automática HELIX ───────────── */
+.hx-interp-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 5px solid var(--accent); border-radius: var(--radius);
+  padding: 1.15rem 1.35rem; margin-bottom: 1.5rem; box-shadow: var(--shadow);
+}
+.hx-interp-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem; flex-wrap: wrap; margin-bottom: .75rem;
+}
+.hx-interp-head h3 { margin: 0; font-size: 1.02rem; }
+.hx-interp-badge {
+  font-size: .74rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+  padding: .25rem .65rem; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent);
+}
+.hx-interp-badge[data-tone="warn"] {
+  background: var(--warn-bg); color: var(--warn); border-color: var(--gold);
+}
+.hx-interp-badge[data-tone="danger"] {
+  background: var(--surface-2); color: var(--danger); border-color: var(--danger);
+}
+.hx-interp-lead {
+  margin: 0 0 .9rem; font-size: .92rem; line-height: 1.55; color: var(--text);
+}
+.hx-interp-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: .85rem;
+}
+.hx-interp-item {
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 8px; padding: .85rem 1rem; font-size: .86rem; line-height: 1.5;
+}
+.hx-interp-item h4 {
+  margin: 0 0 .35rem; font-size: .82rem; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--accent);
+}
+.hx-interp-item[data-tone="danger"] h4 { color: var(--danger); }
+.hx-interp-item[data-tone="warn"] h4 { color: var(--warn); }
+.hx-interp-item p { margin: 0; color: var(--text-dim); }
+.hx-interp-item p b { color: var(--text); }
+.hx-interp-list {
+  margin: .35rem 0 0; padding-left: 1.1rem; color: var(--text-dim);
+}
+.hx-interp-list li { margin-bottom: .35rem; }
+.hx-interp-list li:last-child { margin-bottom: 0; }
+.hx-interp-list b { color: var(--text); }
+
 /* ───────────── Pie / toast ───────────── */
 .site-footer {
   border-top: 1px solid var(--border); background: var(--surface);
@@ -706,12 +754,13 @@ abbr.term {
 
   .bar-track, .bar-fill, .bar-threshold, .chip,
   .score-main .maturity, .plan-badge, .callout,
-  .step, .road-num, .road-summary, .quad-box, .svg-wrap svg {
+  .step, .road-num, .road-summary, .quad-box, .svg-wrap svg,
+  .hx-interp-card, .hx-interp-item, .hx-interp-badge {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  .road-level, .road-summary, .road-level-head, .hx-visual-box, .quad-box { break-inside: avoid; }
+  .road-level, .road-summary, .road-level-head, .hx-visual-box, .quad-box, .hx-interp-card, .hx-interp-item { break-inside: avoid; }
   .road-level-head { break-after: avoid; }
 
   .letterhead {
