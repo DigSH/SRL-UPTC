@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Herramienta de diagnóstico SRL y HELIX (SocialTech) — UPTC</title>
+<meta name="description" content="Herramienta institucional de estimación del nivel de preparación social (SRL 1-9) y valoración de innovación social (HELIX) de la Universidad Pedagógica y Tecnológica de Colombia.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230e2a32'/><text x='16' y='21' text-anchor='middle' font-family='Segoe UI,Arial,sans-serif' font-size='12' font-weight='700' fill='%23ffffff'>SRL</text></svg>">
+<meta name="theme-color" content="#0e2a32">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Ir al contenido</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">SRL</span>
+      <span class="brand-text">
+        <strong>Diagnóstico SRL y valoración HELIX · SocialTech</strong>
+        <small>Vicerrectoría de Investigación y Extensión · UPTC</small>
+      </span>
+    </div>
+    <div class="header-actions">
+      <span class="save-hint" id="save-hint" role="status" aria-live="polite"></span>
+      <button type="button" id="theme-toggle" class="btn btn-ghost" aria-label="Cambiar tema">
+        <span data-theme-icon>◐</span>
+      </button>
+    </div>
+  </div>
+  <nav class="tabs wrap" id="tabs" aria-label="Secciones de la herramienta"></nav>
+  <div class="global-progress" aria-hidden="true"><span id="global-bar"></span></div>
+</header>
+
+<main id="main" class="wrap">
+
+  <!-- ══════════════ GUÍA ══════════════ -->
+  <section class="panel" id="panel-guia" data-panel="guia">
+    <div class="hero">
+      <div class="hero-text">
+        <span class="hero-eyebrow">Universidad Pedagógica y Tecnológica de Colombia · SocialTech</span>
+        <h1>Nivel de preparación social (SRL) y valoración de innovación social (HELIX)</h1>
+        <p>Estime el grado de preparación social (SRL&nbsp;1–9) de su resultado de investigación o extensión,
+          obtenga una ruta de maduración hasta el SRL&nbsp;9 y valore su perfil de innovación social en
+          los 5 vectores y 50 atributos de la metodología HELIX.</p>
+      </div>
+    </div>
+
+    <div class="guide-top">
+      <div id="guide-intro" class="prose"></div>
+
+      <aside class="guide-aside">
+        <div class="callout">
+          <strong>Cómo responder</strong>
+          <ul>
+            <li><b>Módulo SRL (45 preguntas):</b> responda <b>Sí</b> (2&nbsp;pts), <b>Parcialmente</b> (1&nbsp;pto) o <b>No</b> (0&nbsp;pts). Cada nivel se consolida al alcanzar al menos <b>7 de 10 puntos (70&nbsp;%)</b>.</li>
+            <li><b>Módulo HELIX:</b> elija entre la <b>Valoración rápida</b> (5 vectores de 0 a 10) o la <b>Valoración completa</b> (50 atributos con rúbrica de 5 niveles y opción «No aplica»).</li>
+            <li>Sus respuestas se guardan automáticamente en este navegador.</li>
+          </ul>
+        </div>
+        <div class="guide-facts">
+          <div><b>45</b><span>preguntas SRL</span></div>
+          <div><b>9</b><span>niveles SRL</span></div>
+          <div><b>50</b><span>atributos HELIX</span></div>
+        </div>
+        <button type="button" class="btn btn-primary btn-block" data-goto="perfil">Comenzar diagnóstico →</button>
+      </aside>
+    </div>
+
+    <h2>Niveles de preparación social (SRL 1–9)</h2>
+    <div class="levels" id="levels-list"></div>
+
+    <h2>Vectores de innovación social (HELIX)</h2>
+    <div class="levels" id="vectors-list"></div>
+  </section>
+
+  <!-- ══════════════ PERFIL ══════════════ -->
+  <section class="panel" id="panel-perfil" data-panel="perfil" hidden>
+    <h1>Perfil del proyecto o resultado</h1>
+    <p class="lead">Estos datos identifican el diagnóstico y aparecen en los informes en PDF. Ningún dato sale de su navegador.</p>
+
+    <form class="profile-form" id="profile-form" autocomplete="off">
+      <label>
+        <span>Investigador(a) / Evaluador(a)</span>
+        <input type="text" name="investigador" placeholder="Nombre y apellidos">
+      </label>
+      <label>
+        <span>Grupo I+D+i / Centro / Facultad</span>
+        <input type="text" name="grupo" placeholder="Grupo de investigación o unidad">
+      </label>
+      <label>
+        <span>Teléfono de contacto</span>
+        <input type="tel" name="telefono" placeholder="+57 ...">
+      </label>
+      <label>
+        <span>Correo electrónico</span>
+        <input type="email" name="email" placeholder="nombre@uptc.edu.co">
+      </label>
+      <label>
+        <span>Nombre del proyecto, proceso o solución social</span>
+        <input type="text" name="proyecto" placeholder="Denominación del proyecto o iniciativa">
+      </label>
+      <label>
+        <span>Comunidad, territorio o entidad beneficiaria</span>
+        <input type="text" name="comunidad" placeholder="Población o contexto de aplicación">
+      </label>
+      <label class="full">
+        <span>Breve descripción del resultado o iniciativa social <small>(3 – 4 frases)</small></span>
+        <textarea name="descripcion" rows="4" placeholder="Qué problema social aborda, en qué consiste la solución y cuál es su estado actual."></textarea>
+      </label>
+    </form>
+
+    <div class="row-actions">
+      <button type="button" class="btn btn-primary" data-goto="s0">Ir al cuestionario SRL (Nivel 1) →</button>
+      <button type="button" class="btn" data-goto="hx-config">Configurar y valorar HELIX →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════ SECCIONES DE PREGUNTAS SRL (generadas) ══════════════ -->
+  <div id="srl-panels"></div>
+
+  <!-- ══════════════ RESULTADOS SRL ══════════════ -->
+  <section class="panel" id="panel-resultados" data-panel="resultados" hidden>
+    <img class="letterhead print-only" src="assets/img/uptc-vie-cabezote.png" alt="" aria-hidden="true">
+    <div class="results-head">
+      <h1>Resultados del diagnóstico SRL</h1>
+      <div class="row-actions no-print">
+        <button type="button" class="btn" id="btn-print-srl">Descargar informe SRL (PDF)</button>
+        <button type="button" class="btn" id="btn-export">Exportar diagnóstico (JSON)</button>
+        <button type="button" class="btn" id="btn-import-trigger">Importar diagnóstico</button>
+        <input type="file" id="btn-import" accept="application/json" hidden>
+      </div>
+    </div>
+
+    <div id="srl-warning" class="callout warn" hidden></div>
+
+    <div class="print-only report-meta" id="report-meta-srl"></div>
+
+    <div class="score-card" id="srl-score-card"></div>
+
+    <h2>Progreso por nivel SRL</h2>
+    <p class="hint">Cada nivel consta de 5 preguntas calificadas con <b>Sí</b> (2&nbsp;pts), <b>Parcialmente</b> (1&nbsp;pto) o <b>No</b> (0&nbsp;pts), para un máximo de 10 puntos por nivel. Un nivel se considera consolidado cuando alcanza al menos <b>7 puntos (70&nbsp;%)</b>, marcados por la línea vertical de cada barra.</p>
+    <div class="bars" id="bars-srl"></div>
+
+    <h2>Detalle de respuestas por nivel SRL</h2>
+    <div class="detail-grid" id="srl-detail-grid"></div>
+  </section>
+
+  <!-- ══════════════ RUTA DE MADURACIÓN SRL 9 ══════════════ -->
+  <section class="panel" id="panel-plan" data-panel="plan" hidden>
+    <img class="letterhead print-only" src="assets/img/uptc-vie-cabezote.png" alt="" aria-hidden="true">
+    <h1>Ruta de maduración hasta SRL 9</h1>
+    <p class="lead">Recomendaciones y actividades derivadas del diagnóstico para consolidar cada nivel (mínimo 7 de 10 puntos por nivel) y avanzar hasta el SRL&nbsp;9. Incluye las preguntas respondidas con <b>No</b> (0&nbsp;pts) o <b>Parcialmente</b> (1&nbsp;pto).</p>
+    <div class="row-actions no-print">
+      <label class="switch">
+        <input type="checkbox" id="plan-only-pending" checked>
+        <span>Mostrar solo actividades pendientes o parciales</span>
+      </label>
+      <button type="button" class="btn" id="btn-print-plan">Descargar ruta SRL (PDF)</button>
+    </div>
+    <div class="print-only report-meta" id="report-meta-plan"></div>
+    <div id="plan-summary"></div>
+    <div id="plan-list"></div>
+  </section>
+
+  <!-- ══════════════ CONFIGURACIÓN DE PONDERACIÓN HELIX ══════════════ -->
+  <section class="panel" id="panel-hx-config" data-panel="hx-config" hidden>
+    <div class="section-head">
+      <span class="eyebrow">Módulo HELIX · Configuración de parámetros</span>
+      <h1>Ponderación de criterios de innovación social</h1>
+      <p class="lead">HELIX adapta los pesos de los 5 vectores y los 50 elementos según el enfoque del proyecto. Elija una de las cuatro vías del instrumento original (si no modifica esta sección, se aplica la ponderación estándar).</p>
+    </div>
+
+    <div class="weight-modes" id="hx-weight-modes">
+      <label class="mode-card">
+        <input type="radio" name="hx-wmode" value="standard" checked>
+        <div>
+          <strong>1. Estándar (por defecto)</strong>
+          <small>Equilibrio general para valorar proyectos de tipología diversa.</small>
+        </div>
+      </label>
+      <label class="mode-card">
+        <input type="radio" name="hx-wmode" value="preset">
+        <div>
+          <strong>2. Ámbito predeterminado</strong>
+          <small>Seleccione uno de los 19 ámbitos temáticos del instrumento HELIX.</small>
+        </div>
+      </label>
+      <label class="mode-card">
+        <input type="radio" name="hx-wmode" value="preferences">
+        <div>
+          <strong>3. Selección de preferencias</strong>
+          <small>Indique la importancia de 8 ejes transversales (Crucial a Irrelevante).</small>
+        </div>
+      </label>
+      <label class="mode-card">
+        <input type="radio" name="hx-wmode" value="custom">
+        <div>
+          <strong>4. Personalización total</strong>
+          <small>Defina directamente el peso de cada uno de los 5 vectores y 50 elementos.</small>
+        </div>
+      </label>
+    </div>
+
+    <div id="hx-config-body" class="config-panel"></div>
+
+    <h2>Pesos efectivos resultantes (5 vectores)</h2>
+    <div class="bars" id="hx-vector-weights-preview"></div>
+
+    <div class="section-nav no-print">
+      <button type="button" class="btn" data-goto="perfil">← Perfil</button>
+      <div class="row-actions" style="margin:0">
+        <button type="button" class="btn" data-goto="hx-rapida">Ir a Valoración rápida (5 vectores) →</button>
+        <button type="button" class="btn btn-primary" data-goto="hx0">Ir a Valoración completa (50 atributos) →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ VALORACIÓN RÁPIDA HELIX ══════════════ -->
+  <section class="panel" id="panel-hx-rapida" data-panel="hx-rapida" hidden>
+    <div class="section-head">
+      <span class="eyebrow">Módulo HELIX · Valoración rápida</span>
+      <h1>Valoración directa por vectores (0 a 10)</h1>
+      <p class="lead">Califique directamente cada uno de los 5 vectores de innovación social en escala de 0 a 10 (admite decimales en pasos de 0,5). Para un diagnóstico desglosado en los 50 atributos, utilice las pestañas V1 a V5.</p>
+    </div>
+
+    <div class="qlist" id="hx-rapid-list"></div>
+
+    <div class="section-nav no-print">
+      <button type="button" class="btn" data-goto="hx-config">← Ponderación HELIX</button>
+      <div class="row-actions" style="margin:0">
+        <button type="button" class="btn" data-goto="hx0">Valoración completa (V1–V5) →</button>
+        <button type="button" class="btn btn-primary" data-goto="hx-resultados">Ver resultados HELIX →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ SECCIONES VALORACIÓN COMPLETA HELIX V1..V5 (generadas) ══════════════ -->
+  <div id="helix-panels"></div>
+
+  <!-- ══════════════ RESULTADOS HELIX ══════════════ -->
+  <section class="panel" id="panel-hx-resultados" data-panel="hx-resultados" hidden>
+    <img class="letterhead print-only" src="assets/img/uptc-vie-cabezote.png" alt="" aria-hidden="true">
+    <div class="results-head">
+      <h1>Resultados de innovación social (HELIX)</h1>
+      <div class="row-actions no-print">
+        <div class="choice" role="group" aria-label="Modo de valoración a mostrar">
+          <input type="radio" id="hx-eval-complete" name="hx-eval-mode" value="complete" checked>
+          <label for="hx-eval-complete">Completa (50 atributos)</label>
+          <input type="radio" id="hx-eval-rapid" name="hx-eval-mode" value="rapid">
+          <label for="hx-eval-rapid">Rápida (5 vectores)</label>
+        </div>
+        <button type="button" class="btn" id="btn-print-hx">Descargar informe HELIX (PDF)</button>
+        <button type="button" class="btn" id="btn-export-hx">Exportar JSON</button>
+      </div>
+    </div>
+
+    <div id="hx-warning" class="callout warn" hidden></div>
+
+    <div class="print-only report-meta" id="report-meta-hx"></div>
+
+    <div class="score-card" id="hx-score-card"></div>
+
+    <div class="hx-visual-grid">
+      <div class="hx-visual-box">
+        <h2>Perfil radial por vectores (0–10)</h2>
+        <p class="hint">Cuanto más exterior es el pentágono, mayor es la valoración del proyecto. Los vértices más cercanos al centro señalan los vectores prioritarios de mejora.</p>
+        <div class="svg-wrap" id="hx-radar-svg"></div>
+      </div>
+      <div class="hx-visual-box">
+        <h2>Valoración y peso por vector</h2>
+        <p class="hint">Puntuación alcanzada en cada vector (escala 0 a 10) y su peso relativo en la nota global según la ponderación activa.</p>
+        <div class="bars" id="bars-hx-vectors"></div>
+      </div>
+    </div>
+
+    <div id="hx-complete-only">
+      <h2>Mapa de atributos de innovación social (4 cuadrantes)</h2>
+      <p class="hint">Cruza la <b>valoración obtenida</b> (eje horizontal, 0 a 10) con la <b>importancia relativa</b> del atributo en el global del proyecto (eje vertical, 0 a 10, fórmula <code>P1R1!AX46:AX99</code>). Los atributos arriba a la izquierda constituyen las áreas de mejora prioritarias; los de arriba a la derecha, las fortalezas clave.</p>
+      <div class="svg-wrap scatter-wrap" id="hx-scatter-svg"></div>
+
+      <div class="quadrant-grid" id="hx-quadrants"></div>
+
+      <h2>Detalle de los 50 atributos por vector</h2>
+      <div class="detail-grid" id="hx-detail-grid"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ GLOSARIO ══════════════ -->
+  <section class="panel" id="panel-glosario" data-panel="glosario" hidden>
+    <h1>Glosario SRL y HELIX</h1>
+    <p class="lead">Términos empleados en los cuestionarios SRL y HELIX. En las preguntas aparecen <abbr class="term">subrayados</abbr>; pase el cursor sobre ellos para ver la definición.</p>
+    <input type="search" id="glossary-search" class="search" placeholder="Buscar término…" aria-label="Buscar término">
+    <dl class="glossary" id="glossary-list"></dl>
+  </section>
+
+</main>
+
+<footer class="site-footer no-print">
+  <div class="wrap">
+    <p>Escala SRL adaptada de Innovation Fund Denmark · Metodología HELIX adaptada del Observatorio de la Realidad Social de Navarra y Humani.</p>
+    <p>Universidad Pedagógica y Tecnológica de Colombia · Vicerrectoría de Investigación y Extensión<br>
+      Dirección de Investigaciones (DIN) · OCITEB · Oficina de Transferencia de Resultados de Investigación (OTRI)</p>
+    <p class="no-print"><button type="button" class="linklike" id="btn-reset">Borrar todas las respuestas</button></p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
