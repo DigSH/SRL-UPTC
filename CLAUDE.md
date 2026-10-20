@@ -4,8 +4,10 @@ This file provides guidance when working with code in `SRL-UPTC` (SocialTech).
 
 ## What this is
 
-Web application (**SocialTech / SRL-UPTC**) built on the same static, zero-dependency architecture as
-`TRL-UPTC` (`../../TRL/TRL-UPTC/`). It integrates two complementary diagnostic instruments:
+Web application (**SocialTech / SRL-UPTC**), hosted at `https://github.com/DigSH/SRL-UPTC.git` and
+published via GitHub Pages at `https://digsh.github.io/SRL-UPTC/`, built on the same static,
+zero-dependency architecture as `TRL-UPTC` (`../../TRL/TRL-UPTC/`). It integrates two complementary
+diagnostic instruments:
 1. **Societal Readiness Level (SRL 1–9)**: 45 questions (5 per level) from `../Nivel SRL.html` with a
    3-option scale (`No = 0`, `Parcialmente = 1`, `Sí = 2`) and consolidation threshold `>= 7/10` (70%).
 2. **HELIX Social Innovation Assessment**: 5 vectors and 50 attributes from
@@ -42,4 +44,12 @@ python tools/build_brand.py       # regenerate assets/img/uptc-vie-cabezote.png
    - Complete mode: 50 elements with rubric values `[1, 0.75, 0.5, 0.25, 0]`. When an element is marked
      `'na'` (*No aplica*), it counts as answered (`H=1`) but its active weight in the vector is `0`
      (`D=0`), re-normalizing the remaining evaluated elements of that vector (`F_row = E_row / E_sum`).
-4. **Generated data**: Never hand-edit `assets/data.js`; update `tools/build_data.py` and re-run.
+4. **Automatic HELIX Chart Interpretations (`buildRadarInterpretationHtml` & `buildScatterInterpretationHtml`)**:
+   - Rendered in `#hx-radar-interp` and `#hx-scatter-interp` on screen and in A4 print mode.
+   - `buildRadarInterpretationHtml` computes the global maturity tier, pentagon symmetry/gap between
+     strongest and weakest vector, interaction with the highest-weighted vector, and the vector with the
+     highest weighted potential gain (`weight * (10 - score)`).
+   - `buildScatterInterpretationHtml` summarizes quadrant distribution (`P1R4`), ranks top 3 critical
+     gaps in Quadrant 1 (*Áreas de mejora prioritarias*) with their next rubric target (`75%`/`100%`),
+     and highlights the top 3 strategic strengths in Quadrant 2 (*Fortalezas clave*).
+5. **Generated data**: Never hand-edit `assets/data.js`; update `tools/build_data.py` and re-run.

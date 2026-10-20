@@ -1,5 +1,8 @@
 # Herramienta de diagnóstico SRL y valoración HELIX (SocialTech) — UPTC
 
+- **Aplicación publicada**: [https://digsh.github.io/SRL-UPTC/](https://digsh.github.io/SRL-UPTC/)
+- **Repositorio oficial**: `https://github.com/DigSH/SRL-UPTC.git`
+
 Versión web institucional de **SocialTech (SRL-UPTC)**, que integra:
 1. **Diagnóstico del Nivel de Preparación Social (SRL 1 a 9)**, basado en la escala *Societal Readiness Level* de Innovation Fund Denmark.
 2. **Valoración de Innovación Social Aplicada (HELIX)**, basada en la metodología HELIX promovida por el Observatorio de la Realidad Social del Gobierno de Navarra y Humani.
@@ -23,9 +26,9 @@ Es un sitio estático sin dependencias externas, sin servidor y sin base de dato
 - **Dos modalidades de evaluación**:
   - **Valoración rápida**: calificación directa de 0 a 10 de los 5 vectores.
   - **Valoración completa**: calificación de los **50 atributos** (10 por vector) mediante rúbrica de 5 frases descriptivas ($100\,\%, 75\,\%, 50\,\%, 25\,\%, 0\,\%$) más opción «No aplica» (que reajusta proporcionalmente el peso de los demás elementos del vector) y explicación metodológica desplegable.
-- **Visualizaciones en SVG nativo**:
-  - **Perfil radial pentagonal** de los 5 vectores (0–10).
-  - **Mapa de atributos en 4 cuadrantes** (Valoración obtenida vs. Importancia relativa en base 10): clasifica automáticamente los atributos en *Fortalezas clave*, *Áreas de mejora prioritarias*, *Fortalezas secundarias* y *Debilidades secundarias*.
+- **Visualizaciones en SVG nativo con interpretación automática en tiempo real**:
+  - **Perfil radial pentagonal** de los 5 vectores (0–10), acompañado de **interpretación automática** que evalúa el tramo de madurez global, la simetría/asimetría geométrica del pentágono, la interacción con el peso estratégico activo y el vector con mayor palanca de mejora global.
+  - **Mapa de atributos en 4 cuadrantes** (Valoración obtenida vs. Importancia relativa en base 10): clasifica automáticamente los atributos en *Fortalezas clave*, *Áreas de mejora prioritarias*, *Fortalezas secundarias* y *Debilidades secundarias*, e incluye **interpretación automática** con la distribución porcentual en cuadrantes, las 3 prioridades críticas del cuadrante superior izquierdo con su meta concreta de la rúbrica HELIX y los 3 activos diferenciales del cuadrante superior derecho.
 - **Glosario integrado** con resaltado automático en las preguntas, **exportación/importación en JSON** e **informes en PDF A4** con membrete oficial de la UPTC / Vicerrectoría de Investigación y Extensión.
 
 ## Estructura
